@@ -37,8 +37,7 @@ jobs:
 
     - name: Test data pipeline
       run: |
-        python -c "
-import yfinance as yf
+        python -c "import yfinance as yf
 import pandas as pd
 import numpy as np
 print('Testing data fetch...')
@@ -48,8 +47,7 @@ try:
     print('Data fetch successful')
 except Exception as e:
     print(f'Data fetch failed: {e}')
-    print('Will use sample data in production')
-"
+    print('Will use sample data in production')"
 
     - name: Test Streamlit app syntax
       run: |
@@ -58,15 +56,13 @@ except Exception as e:
 
     - name: Test imports
       run: |
-        python -c "
-import streamlit as st
+        python -c "import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 import yfinance as yf
 import sklearn
-print('✅ All imports successful')
-"
+print('✅ All imports successful')"
 
   deploy:
     runs-on: ubuntu-latest
@@ -104,8 +100,7 @@ print('✅ All imports successful')
 
     - name: Update market data cache
       run: |
-        python -c "
-import yfinance as yf
+        python -c "import yfinance as yf
 import pickle
 from datetime import datetime
 
@@ -128,8 +123,7 @@ try:
     print(f'Latest close: ₹{nifty.Close.iloc[-1]:.2f}')
 
 except Exception as e:
-    print(f'❌ Market data update failed: {e}')
-"
+    print(f'❌ Market data update failed: {e}')"
 
     - name: Commit updated cache
       run: |
