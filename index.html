@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nifty AI Indicator Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Header Section -->
+        <header class="dashboard-header">
+            <div class="header-content">
+                <div class="title-section">
+                    <h1>Nifty AI Indicator Dashboard</h1>
+                    <p class="subtitle">AI-Powered Technical Analysis for Nifty 50 Index</p>
+                </div>
+                <div class="header-info">
+                    <div class="datetime-display" id="currentDateTime">
+                        Friday, September 26, 2025 - 5:00 PM
+                    </div>
+                    <div class="market-status" id="marketStatus">
+                        <span class="status-indicator neutral"></span>
+                        Market Open
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Key Metrics Cards -->
+        <section class="metrics-section">
+            <div class="metrics-grid">
+                <div class="metric-card signal-card">
+                    <div class="metric-header">
+                        <h3>AI Signal</h3>
+                        <span class="metric-icon">🤖</span>
+                    </div>
+                    <div class="metric-value">
+                        <span class="signal-badge neutral" id="aiSignal">Neutral</span>
+                    </div>
+                    <div class="metric-change" id="signalChange">Last updated: 2 hours ago</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <h3>Signal Strength</h3>
+                        <span class="metric-icon">⚡</span>
+                    </div>
+                    <div class="metric-value">
+                        <span id="signalStrength">18</span><span class="unit">%</span>
+                    </div>
+                    <div class="metric-change neutral">Moderate</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <h3>Current Nifty</h3>
+                        <span class="metric-icon">📈</span>
+                    </div>
+                    <div class="metric-value">
+                        <span id="currentPrice">64,525.1</span>
+                    </div>
+                    <div class="metric-change positive" id="priceChange">+635.0 (+1.0%)</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <h3>Trend Direction</h3>
+                        <span class="metric-icon">📊</span>
+                    </div>
+                    <div class="metric-value">
+                        <span id="trendDirection">Upward</span>
+                        <span class="trend-arrow up">↗</span>
+                    </div>
+                    <div class="metric-change positive">Strong momentum</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <h3>RSI Level</h3>
+                        <span class="metric-icon">📋</span>
+                    </div>
+                    <div class="metric-value">
+                        <span id="rsiValue">66.1</span>
+                    </div>
+                    <div class="metric-change warning" id="rsiCondition">Approaching Overbought</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <h3>Confidence Score</h3>
+                        <span class="metric-icon">🎯</span>
+                    </div>
+                    <div class="metric-value">
+                        <span id="confidenceScore">54.5</span><span class="unit">%</span>
+                    </div>
+                    <div class="metric-change neutral">Medium Confidence</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Chart Section -->
+        <section class="chart-section">
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h2>Nifty 50 Price Chart</h2>
+                    <div class="chart-controls">
+                        <button class="btn btn--sm btn--outline" id="toggleMA">Moving Averages</button>
+                        <button class="btn btn--sm btn--outline" id="toggleBB">Bollinger Bands</button>
+                        <button class="btn btn--sm btn--outline" id="toggleVolume">Volume</button>
+                    </div>
+                </div>
+                <div class="chart-wrapper" style="position: relative; height: 400px;">
+                    <canvas id="priceChart"></canvas>
+                </div>
+                <div class="ai-score-chart-wrapper" style="position: relative; height: 120px; margin-top: 10px;">
+                    <canvas id="aiScoreChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technical Indicators Panel -->
+        <section class="indicators-section">
+            <div class="indicators-container">
+                <h2>Technical Indicators</h2>
+                <div class="indicators-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Indicator</th>
+                                <th>Current Value</th>
+                                <th>Status</th>
+                                <th>Signal</th>
+                            </tr>
+                        </thead>
+                        <tbody id="indicatorsTableBody">
+                            <tr>
+                                <td>RSI (14)</td>
+                                <td id="rsiTableValue">66.1</td>
+                                <td><span class="status status--warning">Neutral</span></td>
+                                <td>Watch for reversal</td>
+                            </tr>
+                            <tr>
+                                <td>MACD</td>
+                                <td id="macdTableValue">465.0</td>
+                                <td><span class="status status--success">Bullish</span></td>
+                                <td>Above signal line</td>
+                            </tr>
+                            <tr>
+                                <td>SMA (5)</td>
+                                <td id="sma5TableValue">63,200.0</td>
+                                <td><span class="status status--success">Bullish</span></td>
+                                <td>Above price</td>
+                            </tr>
+                            <tr>
+                                <td>SMA (20)</td>
+                                <td id="sma20TableValue">62,150.5</td>
+                                <td><span class="status status--success">Bullish</span></td>
+                                <td>Upward trending</td>
+                            </tr>
+                            <tr>
+                                <td>Volume</td>
+                                <td id="volumeTableValue">1,050,000</td>
+                                <td><span class="status status--info">Normal</span></td>
+                                <td>Average activity</td>
+                            </tr>
+                            <tr>
+                                <td>Support/Resistance</td>
+                                <td id="supportResistanceValue">61,200 / 65,400</td>
+                                <td><span class="status status--info">Active</span></td>
+                                <td>Key levels identified</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Insights Section -->
+        <section class="insights-section">
+            <div class="insights-container">
+                <h2>AI Market Insights</h2>
+                <div class="insights-grid">
+                    <div class="insight-card">
+                        <h3>Current Market Condition</h3>
+                        <p id="marketCondition">The market is showing neutral sentiment with moderate bullish undertones. Recent price action suggests consolidation around current levels with potential for upward breakout.</p>
+                    </div>
+                    
+                    <div class="insight-card">
+                        <h3>Pattern Recognition</h3>
+                        <ul id="patternList">
+                            <li>Moving Average Crossover: SMA 5 above SMA 20 (Bullish)</li>
+                            <li>MACD: Above signal line (Positive momentum)</li>
+                            <li>Bollinger Bands: Price near middle band (Neutral)</li>
+                            <li>Volume: Normal trading activity</li>
+                        </ul>
+                    </div>
+
+                    <div class="insight-card">
+                        <h3>Risk Assessment</h3>
+                        <div class="risk-assessment">
+                            <div class="risk-level medium" id="riskLevel">Medium Risk</div>
+                            <p id="riskDescription">Current market conditions present moderate risk. Volatility is elevated, requiring careful position sizing and risk management.</p>
+                        </div>
+                    </div>
+
+                    <div class="insight-card">
+                        <h3>Trading Recommendation</h3>
+                        <div class="recommendation">
+                            <p id="tradingRecommendation">Hold positions with tight stop losses. Monitor for breakout above 65400 resistance. Consider reducing position size in current volatile environment.</p>
+                            <div class="key-levels">
+                                <div class="level-item">
+                                    <span class="level-label">Strong Support:</span>
+                                    <span class="level-value">61,200</span>
+                                </div>
+                                <div class="level-item">
+                                    <span class="level-label">Strong Resistance:</span>
+                                    <span class="level-value">65,400</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Signal History -->
+        <section class="history-section">
+            <div class="history-container">
+                <h2>Signal History & Performance</h2>
+                <div class="history-content">
+                    <div class="history-stats">
+                        <div class="stat-item">
+                            <span class="stat-value">87.5%</span>
+                            <span class="stat-label">Accuracy (Last 30 days)</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">23</span>
+                            <span class="stat-label">Total Signals</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">+12.3%</span>
+                            <span class="stat-label">Portfolio Return</span>
+                        </div>
+                    </div>
+                    
+                    <div class="history-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Signal</th>
+                                    <th>Price Level</th>
+                                    <th>Accuracy</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyTableBody">
+                                <!-- Dynamic content populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
